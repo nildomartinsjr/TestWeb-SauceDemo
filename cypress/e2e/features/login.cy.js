@@ -1,9 +1,8 @@
 describe('Login Sauce Demo', () => {
-  beforeEach(() => {
-    cy.visit('https://www.saucedemo.com')
+  beforeEach(() => { // Executa este hook antes de cada caso de teste para preparar o ambiente.
+    cy.visit('https://www.saucedemo.com') // Acessa a página inicial da Sauce Demo.
   });
 
-//Case test 01
   it('Deve fazer login com sucesso.', () => {
     cy.get('[data-test="username"]').type('standard_user')
     cy.get('[data-test="password"]').type('secret_sauce')
@@ -14,7 +13,6 @@ describe('Login Sauce Demo', () => {
 
   });
 
-//Case test 02
   it('Não deve logar com credenciais inválidas (usuário e senha).', () => {
     cy.get('[data-test="username"]').type('usuario_errado')
     cy.get('[data-test="password"]').type('senha_errada')
@@ -24,7 +22,6 @@ describe('Login Sauce Demo', () => {
       .and('contain', 'Epic sadface: Username and password do not match any user in this service')
   });
 
-//Case test 03
   it('Não deve logar com senha errada.', () => {
     cy.get('[data-test="username"]').type('standard_user')
     cy.get('[data-test="password"]').type('senha_errada')
@@ -34,8 +31,6 @@ describe('Login Sauce Demo', () => {
       .and('contain', 'Epic sadface: Username and password do not match any user in this service')
   });
 
-
-//Case test 04
   it('Não deve logar com campo de usuário vazio.', () => {
     cy.get('[data-test="username"]')
     cy.get('[data-test="password"]').type('secret_sauce')
