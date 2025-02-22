@@ -39,4 +39,39 @@ describe('Listagem de Produtos (Inventário)', () => {
         .should('be.visible');
     });
   });
+
+  it('Seleciona uma opção no select de ordenação e confirma se a opção foi selecionada corretamente', () => {
+    cy.get('select[data-test="product-sort-container"]').as('dropdown'); // Cria um alias
+    cy.get('@dropdown').select('Price (low to high)');
+    cy.get('@dropdown').should('have.value', 'lohi'); // Valida novamente o elemento atualizado
+  });
+  it.only('Valida se a ordenação dos produtos muda corretamente de A-Z para Z-A', () => {
+    let nomesAntes = [];
+  
+    // Captura os nomes dos produtos antes da mudança
+    cy.get('.inventory_item_name')
+      .then(($items) => {
+        nomesAntes = [...$items].map(el => el.innerText); // Coleta os nomes no array
+        cy.log('Lista antes da ordenação:', nomesAntes);
+      });
+  
+    // Seleciona a opção de ordenação "Name (Z to A)"
+    cy.get('select[data-test="product-sort-container"]').select('Name (Z to A)');
+  
+    let nomesDepois = [];
+  
+    // Captura os nomes dos produtos após a mudança para "Z to A"
+    cy.get('.inventory_item_name')
+      .then(($items) => {
+        nomesDepois = [...$items].map(el => el.innerText); // Coleta os nomes novamente
+        cy.log('Lista após a ordenação:', nomesDepois);
+  
+        // Agora verificamos se a lista realmente inverteu
+        const nomesEsperados = [...nomesAntes].sort().reverse();
+        expect(nomesDepois).to.deep.equal(nomesEsperados);
+      });
+  });
+  
+  
+  
 });
