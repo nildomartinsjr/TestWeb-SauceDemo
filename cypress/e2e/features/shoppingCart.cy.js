@@ -49,4 +49,22 @@ describe('Carrinho', () => {
         cy.get('.cart_item').should('not.exist');
         cy.get('[data-test="shopping-cart-badge"]').should('not.exist');
     });
+
+    it('Deve exibir corretamente os produtos adicionados no carrinho', () => {
+        // Adiciona todos os produtos usando .each() e  cy.wrap() para iterar sobre todos os botões e clicar neles, // Utiliza também o seletor com o operador ^=, que seleciona elementos cujo atributo data-test começa com "add-to-cart".
+      // Isso é útil se o valor do atributo pode variar, mas sempre inicia com "add-to-cart".
+      cy.get('[data-test^="add-to-cart"]').each((botaoAdd) => {
+        cy.wrap(botaoAdd).click();
+      })
+       // Acessa a página do carrinho
+      cy.get('[data-test="shopping-cart-link"]').click()
+       // Verifica se os produtos aparecem no carrinho
+      cy.get('.cart_item').should('have.length', 6)
+      // Valida que cada produto tem Nome e Preço
+      cy.get('.cart_item').each((item) => {
+        cy.wrap(item).find('.inventory_item_name').should('be.visible')
+        cy.wrap(item).find('.inventory_item_price').should('be.visible')
+      })
+    });
+    
 });
